@@ -57,6 +57,8 @@ import com.thefinestartist.utils.service.ClipboardManagerUtil;
 import com.thefinestartist.utils.ui.DisplayUtil;
 import com.thefinestartist.utils.ui.ViewUtil;
 
+import java.lang.ref.WeakReference;
+
 //MailTo Imports
 
 /**
@@ -65,6 +67,7 @@ import com.thefinestartist.utils.ui.ViewUtil;
 public class FinestWebViewActivity extends AppCompatActivity
     implements AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
 
+  protected static WeakReference<FinestWebViewActivity> currentActivityInstance;
   protected int key;
 
   protected boolean rtl;
@@ -988,6 +991,7 @@ public class FinestWebViewActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     initializeOptions();
+    currentActivityInstance = new WeakReference<>(this);
 
     setContentView(R.layout.finest_web_view);
     bindViews();
@@ -1204,6 +1208,10 @@ public class FinestWebViewActivity extends AppCompatActivity
         }
       }
     }, ViewConfiguration.getZoomControlsTimeout() + 1000L);
+  }
+
+  public static FinestWebViewActivity getCurrentActivityInstance() {
+      return currentActivityInstance.get();
   }
 
   public class MyWebChromeClient extends WebChromeClient {
